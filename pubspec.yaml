@@ -52,6 +52,7 @@ dependencies:
   firebase_storage: ^11.0.11
   youtube_player_flutter: ^8.1.2
   permission_handler: ^10.2.0
+  rounded_bottom_navbar: ^0.0.1
 
 dev_dependencies:
   flutter_test:

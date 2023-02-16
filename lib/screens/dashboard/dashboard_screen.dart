@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   bottomRight: Radius.circular(18),
                   bottomLeft: Radius.circular(18),
                 ),
-                title: 'Blood-Bak',
+                title: 'Blood-Bank',
               ))
           : _selectedIndex == 1
               ? const PreferredSize(
@@ -73,10 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                   ))
               : AppBar(),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SafeArea(child: widgets.elementAt(_selectedIndex)),
-      ),
+      body: SafeArea(child: widgets.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: whiteColor,

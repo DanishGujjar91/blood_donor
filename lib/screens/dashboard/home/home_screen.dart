@@ -28,25 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCarouselImage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Padding(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 2.2,
+            aspectRatio: 2.5,
             child: CarouselSlider(
               options: CarouselOptions(
-                height: 400,
+                height: 200,
                 aspectRatio: 16 / 9,
-                viewportFraction: 0.8,
+                viewportFraction: 0.9,
                 initialPage: 0,
                 enableInfiniteScroll: true,
                 reverse: false,
@@ -79,9 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
           ),
-          const SizedBox(
-            height: 15,
-          ),
           DotsIndicator(
             dotsCount: _carouselImages.isEmpty ? 1 : _carouselImages.length,
             position: _dotPostion.toDouble(),
@@ -93,13 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(5.0)),
             ),
           ),
-          const SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+          Wrap(
+            spacing: 12.0, // gap between adjacent chips
+            runSpacing: 12.0, // gap between lines
+            children: <Widget>[
               BoxWidget(
                 onTap: () {},
                 icon: Icons.health_and_safety,
@@ -109,37 +102,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {},
                 icon: Icons.bloodtype,
                 text: 'Blood Bank',
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+              ),
               BoxWidget(
+                onTap: () {},
                 icon: Icons.message,
                 text: 'Request',
               ),
               BoxWidget(
+                onTap: () {},
                 icon: Icons.settings,
                 text: 'Other',
+              ),
+              BoxWidget(
+                onTap: () {},
+                icon: Icons.location_on,
+                text: 'Location',
+              ),
+              BoxWidget(
+                onTap: () {},
+                icon: Icons.settings,
+                text: 'Setting',
               )
             ],
           ),
         ],
       ),
-    ));
+    );
   }
 }
 
 class BoxWidget extends StatelessWidget {
   final IconData? icon;
   final String? text;
+  final MainAxisAlignment? mainAxisAlignment;
   final void Function()? onTap;
-  const BoxWidget({Key? key, this.icon, this.text = '', this.onTap})
+  const BoxWidget(
+      {Key? key, this.icon, this.text = '', this.onTap, this.mainAxisAlignment})
       : super(key: key);
 
   @override
@@ -149,8 +147,12 @@ class BoxWidget extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.2,
-            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 0.15
+                : MediaQuery.of(context).size.height * 0.40,
+            width: MediaQuery.of(context).orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.width * 0.27
+                : MediaQuery.of(context).size.width * 0.28,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -160,7 +162,7 @@ class BoxWidget extends StatelessWidget {
                   offset: const Offset(1, 2), // changes position of shadow
                 ),
               ],
-              color: whiteColor,
+              color: primaryColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -169,10 +171,16 @@ class BoxWidget extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 90,
-                  color: primaryColor,
+                  size:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? MediaQuery.of(context).size.height * 0.07
+                          : MediaQuery.of(context).size.height * 0.2,
+                  color: whiteColor,
                 ),
-                Text(text!)
+                Text(
+                  text!,
+                  style: const TextStyle(color: whiteColor),
+                )
               ],
             ),
           )
