@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   bottomRight: Radius.circular(18),
                   bottomLeft: Radius.circular(18),
                 ),
-                title: 'Blood-Bank',
+                title: 'Blood-Bak',
               ))
           : _selectedIndex == 1
               ? const PreferredSize(
