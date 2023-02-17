@@ -32,7 +32,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               color: primaryColor,
             ),
             child: Column(
-              children: [Text("Email: " + user!.email!)],
+              children: [Text("Email: ${user!.email!}")],
             ),
           ),
           ListTile(

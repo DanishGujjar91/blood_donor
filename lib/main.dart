@@ -1,5 +1,4 @@
 import 'package:blood_donor/firebase_options.dart';
-import 'package:blood_donor/home_page.dart';
 import 'package:blood_donor/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         background: Container(color: const Color(0xFFF5F5F5)),
       ),
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: const AuthPage(),
     );
   }
 }

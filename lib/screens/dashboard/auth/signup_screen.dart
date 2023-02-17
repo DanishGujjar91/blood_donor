@@ -1,15 +1,11 @@
 import 'dart:io';
-
 import 'package:blood_donor/constants/color_constant.dart';
-import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_text_form_field.dart';
 import 'package:blood_donor/models/user_model.dart';
 import 'package:blood_donor/screens/dashboard/auth/login_screen.dart';
-import 'package:blood_donor/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -35,7 +31,6 @@ class _SignupScreenState extends State<SignupScreen> {
   String? errorMessage = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (FirebaseAuth.instance.currentUser!.displayName == null) {
@@ -239,7 +234,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       print(phone.completeNumber);
                     },
                     onCountryChanged: (country) {
-                      print('Country changed to: ' + country.name);
+                      // print('Country changed to: ' + country.name);
                     },
                   ),
                 ),

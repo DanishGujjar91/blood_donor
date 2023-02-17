@@ -1,12 +1,9 @@
 import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_text_form_field.dart';
-import 'package:blood_donor/helper_widget/helper_service.dart/custom_loader.dart';
 import 'package:blood_donor/helper_widget/helper_service.dart/custom_snackbar.dart';
-import 'package:blood_donor/screens/dashboard/auth/logout_screen.dart';
 import 'package:blood_donor/screens/dashboard/auth/signup_screen.dart';
 import 'package:blood_donor/screens/dashboard/dashboard_screen.dart';
-import 'package:blood_donor/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

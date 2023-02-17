@@ -32,7 +32,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   if (FirebaseAuth.instance.currentUser!.displayName == null) {
@@ -235,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   print(phone.completeNumber);
                 },
                 onCountryChanged: (country) {
-                  print('Country changed to: ' + country.name);
+                  print('Country changed to: ${country.name}');
                 },
               ),
             ),

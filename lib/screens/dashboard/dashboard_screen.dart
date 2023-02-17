@@ -3,7 +3,6 @@ import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_drawer.dart';
 import 'package:blood_donor/screens/dashboard/auth/signup_screen.dart';
 import 'package:blood_donor/screens/dashboard/home/home_screen.dart';
-import 'package:blood_donor/screens/dashboard/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +34,6 @@ class _DashboardScreenState extends State<DashboardScreen>
       FirebaseAuth.instance.signOut();
     }
 
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: const CustomDrawer(),

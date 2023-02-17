@@ -16,8 +16,8 @@ class Auth {
       required String password,
       required BuildContext context}) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      // UserCredential userCredential = await FirebaseAuth.instance
+      //     .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -30,8 +30,8 @@ class Auth {
   Future<void> createUserWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      // UserCredential userCredential = await FirebaseAuth.instance
+      //     .createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
