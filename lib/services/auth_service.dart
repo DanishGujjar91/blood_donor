@@ -70,7 +70,7 @@ class Auth {
 
     if (user != null) {
       Timer(
-        const Duration(seconds: 3),
+        const Duration(seconds: 0),
         (() => Navigator.push(
             context,
             MaterialPageRoute(

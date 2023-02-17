@@ -60,10 +60,8 @@ class _DashboardScreenState extends State<DashboardScreen>
               ))
           : _selectedIndex == 1
               ? const PreferredSize(
-                  preferredSize: Size.fromHeight(100.0),
+                  preferredSize: Size.fromHeight(60.0),
                   child: CustomAppBar(
-                    icon: Icons.bloodtype,
-                    iconSize: 80,
                     title: 'Blood-Bank',
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(18),
