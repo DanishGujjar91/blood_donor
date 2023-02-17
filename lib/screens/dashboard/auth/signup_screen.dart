@@ -57,186 +57,193 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Center(
-              child: GestureDetector(
-                onTap: () async {
-                  final XFile? pickImage = await ImagePicker()
-                      .pickImage(source: ImageSource.gallery, imageQuality: 50);
-                  if (pickImage != null) {
-                    setState(() {
-                      profilePic = pickImage.path;
-                    });
-                  }
-                },
-                child: Container(
-                  child: profilePic == null
-                      ? CircleAvatar(
-                          radius: 60,
-                          backgroundColor: greyColor,
-                          child: Image.asset('assets/images/profile.png',
-                              fit: BoxFit.fill, width: 130, height: 130),
-                        )
-                      : profilePic!.contains('http')
-                          ? CircleAvatar(
-                              radius: 60,
-                              backgroundImage: NetworkImage(profilePic!))
-                          : CircleAvatar(
-                              radius: 60,
-                              backgroundImage: FileImage(File(profilePic!)),
-                            ),
-                ),
-              ),
-            ),
-            CustomTextFormField(
-              controller: name,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'This field is required';
-                }
-                if (!RegExp(r"^[A-Za-z][A-Za-z0-9_]{7,29}$").hasMatch(value)) {
-                  return "Please enter a valid name";
-                }
-                return null;
-              },
-              keyboardtype: TextInputType.name,
-              autoFocus: false,
-              hinttext: 'Name',
-              labeltext: 'Name',
-              prefixicon: const Icon(
-                Icons.person,
-                color: primaryColor,
-              ),
-            ),
-            CustomTextFormField(
-              controller: email,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'This field is required';
-                }
-                if (!RegExp(
-                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value)) {
-                  return "Please enter a valid email address";
-                }
-                return null;
-              },
-              keyboardtype: TextInputType.emailAddress,
-              autoFocus: false,
-              hinttext: 'Email',
-              labeltext: 'Email',
-              prefixicon: const Icon(
-                Icons.email,
-                color: primaryColor,
-              ),
-            ),
-            CustomTextFormField(
-              controller: password,
-              validator: (value) {
-                RegExp regex = RegExp(
-                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-                if (value!.isEmpty) {
-                  return 'Please enter password';
-                } else if (value.length < 6) {
-                  return 'Password too short';
-                } else {
-                  if (!regex.hasMatch(value)) {
-                    return 'Enter valid password';
-                  } else {
-                    return null;
-                  }
-                }
-              },
-              keyboardtype: TextInputType.text,
-              obscuretext: true,
-              autoFocus: false,
-              hinttext: 'Password',
-              labeltext: 'Password',
-              prefixicon: const Icon(
-                Icons.password,
-                color: primaryColor,
-              ),
-            ),
-            CustomTextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Plase enter re-password';
-                }
-                if (password.text != confirmPassword.text) {
-                  return 'Password do not match';
-                }
-                return null;
-              },
-              controller: confirmPassword,
-              keyboardtype: TextInputType.text,
-              obscuretext: true,
-              autoFocus: false,
-              hinttext: 'ConfirmPassword',
-              labeltext: 'Confirm Password',
-              prefixicon: const Icon(
-                Icons.password,
-                color: primaryColor,
-              ),
-            ),
-            SizedBox(
-              height: 60,
-              child: IntlPhoneField(
-                controller: phone,
-                decoration: InputDecoration(
-                  focusColor: primaryColor,
-                  hoverColor: primaryColor,
-                  hintText: 'Phone Number',
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red),
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  counter: const Offstage(),
-                  contentPadding:
-                      const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-                onChanged: (phone) {
-                  print(phone.completeNumber);
-                },
-                onCountryChanged: (country) {
-                  // print('Country changed to: ' + country.name);
-                },
-              ),
-            ),
-            SizedBox(
-              height: 45,
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    const snackBar = SnackBar(
-                      content: Text('select proifle pic!'),
-                    );
-                    profilePic == null
-                        ? ScaffoldMessenger.of(context).showSnackBar(snackBar)
-                        : createUserWithEmailAndPassword();
-                  }
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(primaryColor),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      // side: BorderSide(color: Colors.red),
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Center(
+                    child: GestureDetector(
+                      onTap: () async {
+                        final XFile? pickImage = await ImagePicker().pickImage(
+                            source: ImageSource.gallery, imageQuality: 50);
+                        if (pickImage != null) {
+                          setState(() {
+                            profilePic = pickImage.path;
+                          });
+                        }
+                      },
+                      child: Container(
+                        child: profilePic == null
+                            ? CircleAvatar(
+                                radius: 60,
+                                backgroundColor: greyColor,
+                                child: Image.asset('assets/images/profile.png',
+                                    fit: BoxFit.fill, width: 130, height: 130),
+                              )
+                            : profilePic!.contains('http')
+                                ? CircleAvatar(
+                                    radius: 60,
+                                    backgroundImage: NetworkImage(profilePic!))
+                                : CircleAvatar(
+                                    radius: 60,
+                                    backgroundImage:
+                                        FileImage(File(profilePic!)),
+                                  ),
+                      ),
                     ),
                   ),
-                ),
-                child: Text(name.text.isEmpty ? 'Signup' : 'Update'),
+                  CustomTextFormField(
+                    controller: name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field is required';
+                      }
+                      if (!RegExp(r"^[A-Za-z][A-Za-z0-9_]{7,29}$")
+                          .hasMatch(value)) {
+                        return "Please enter a valid name";
+                      }
+                      return null;
+                    },
+                    keyboardtype: TextInputType.name,
+                    autoFocus: false,
+                    hinttext: 'Name',
+                    labeltext: 'Name',
+                    prefixicon: const Icon(
+                      Icons.person,
+                      color: primaryColor,
+                    ),
+                  ),
+                  CustomTextFormField(
+                    controller: email,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field is required';
+                      }
+                      if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(value)) {
+                        return "Please enter a valid email address";
+                      }
+                      return null;
+                    },
+                    keyboardtype: TextInputType.emailAddress,
+                    autoFocus: false,
+                    hinttext: 'Email',
+                    labeltext: 'Email',
+                    prefixicon: const Icon(
+                      Icons.email,
+                      color: primaryColor,
+                    ),
+                  ),
+                  CustomTextFormField(
+                    controller: password,
+                    validator: (value) {
+                      RegExp regex = RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                      if (value!.isEmpty) {
+                        return 'Please enter password';
+                      } else if (value.length < 6) {
+                        return 'Password too short';
+                      } else {
+                        if (!regex.hasMatch(value)) {
+                          return 'Enter valid password';
+                        } else {
+                          return null;
+                        }
+                      }
+                    },
+                    keyboardtype: TextInputType.text,
+                    obscuretext: true,
+                    autoFocus: false,
+                    hinttext: 'Password',
+                    labeltext: 'Password',
+                    prefixicon: const Icon(
+                      Icons.password,
+                      color: primaryColor,
+                    ),
+                  ),
+                  CustomTextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Plase enter re-password';
+                      }
+                      if (password.text != confirmPassword.text) {
+                        return 'Password do not match';
+                      }
+                      return null;
+                    },
+                    controller: confirmPassword,
+                    keyboardtype: TextInputType.text,
+                    obscuretext: true,
+                    autoFocus: false,
+                    hinttext: 'ConfirmPassword',
+                    labeltext: 'Confirm Password',
+                    prefixicon: const Icon(
+                      Icons.password,
+                      color: primaryColor,
+                    ),
+                  ),
+                  IntlPhoneField(
+                    controller: phone,
+                    decoration: InputDecoration(
+                      focusColor: primaryColor,
+                      hoverColor: primaryColor,
+                      hintText: 'Phone Number',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      counter: const Offstage(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                    onChanged: (phone) {
+                      print(phone.completeNumber);
+                    },
+                    onCountryChanged: (country) {
+                      // print('Country changed to: ' + country.name);
+                    },
+                  ),
+                  SizedBox(
+                    height: 45,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          const snackBar = SnackBar(
+                            content: Text('select proifle pic!'),
+                          );
+                          profilePic == null
+                              ? ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar)
+                              : createUserWithEmailAndPassword();
+                        }
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(primaryColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            // side: BorderSide(color: Colors.red),
+                          ),
+                        ),
+                      ),
+                      child: Text(name.text.isEmpty ? 'Signup' : 'Update'),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
