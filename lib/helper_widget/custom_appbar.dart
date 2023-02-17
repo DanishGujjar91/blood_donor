@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import '../constants/color_constant.dart';
@@ -7,7 +5,7 @@ import '../constants/color_constant.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar(
       {super.key,
-      this.leading = null,
+      this.leading,
       required this.title,
       this.textStyle,
       this.iconSize,
@@ -61,6 +59,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size(double.infinity, 120);
+  Size get preferredSize => const Size(double.infinity, 120);
 }

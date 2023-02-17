@@ -25,7 +25,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Center(child: Text('Welcome To login '))],
       ),
     );
   }
