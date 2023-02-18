@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final ref = FirebaseDatabase.instance.ref('Users');
 
   String? profilePic;
-  bool isSaving = false;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -39,62 +39,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //         const SnackBar(content: Text('please complete profile firsty')));
     //   } else {
     //     FirebaseFirestore.instance
-    //         .collection('Users')
+    //         .collection('users')
     //         .doc(FirebaseAuth.instance.currentUser!.uid)
     //         .get()
-    //         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    //       name.text = snapshot['name'];
-    //       email.text = snapshot['email'];
-    //       password.text = snapshot['password'];
-    //       confirmPassword.text = snapshot['confirmPassword'];
-    //       phone.text = snapshot['phoneNo'];
+    //         .then((DocumentSnapshot documentSnapshot) {
+    //       if (documentSnapshot.exists) {
+    //         print('Document exists on the database');
+    //       }
     //     });
     //   }
     // });
-    // Future getDatabaseData() async {
-    //   await FirebaseFirestore.instance
-    //       .collection('Users')
-    //       .doc(FirebaseAuth.instance.currentUser!.uid)
-    //       .get()
-    //       .then((value) async {
-    //     if (value.exists) {
-    //       setState(() {
-    //         name = value.data()!['name'];
-    //         email = value.data()!['email'];
-    //         password = value.data()!['password'];
-    //         confirmPassword = value.data()!['confirmPassword'];
-    //         phone = value.data()!['phoneNo'];
-    //       });
-    //       print(value.exists);
-    //     }
-    //   });
-    // }
+    fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(12, 25, 12, 0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Center(
-                  child: Text(
-                    'Update Your profile!',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
             GestureDetector(
               onTap: () async {
                 final XFile? pickImage = await ImagePicker()
@@ -110,9 +77,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: profilePic == null
                       ? CircleAvatar(
                           radius: 60,
-                          backgroundColor: primaryColor,
+                          backgroundColor: lightGreyColor,
                           child: Image.asset('assets/images/profile.png',
-                              width: 80, height: 80),
+                              width: 115, height: 115),
                         )
                       : CircleAvatar(
                           radius: 60,
@@ -120,6 +87,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: 20,
             ),
             CustomTextFormField(
               controller: name,
@@ -263,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Signup',
+                    'Update',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -294,9 +264,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  update() {
-    uploadImage(File(profilePic!), 'profile').whenComplete(() {
-      FirebaseFirestore.instance
+  Future update() async {
+    await uploadImage(File(profilePic!), 'profile').whenComplete(() async {
+      await FirebaseFirestore.instance
           .collection('Users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update(UserMode(
@@ -310,6 +280,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .whenComplete(() {
         FirebaseAuth.instance.currentUser!.updateDisplayName(name.text);
       });
+    });
+  }
+
+  fetch() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+      } else {
+        print('Document does not exist on the database');
+      }
     });
   }
 }

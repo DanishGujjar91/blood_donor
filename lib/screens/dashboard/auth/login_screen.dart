@@ -116,94 +116,102 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: <Widget>[
               Expanded(
-                  child: Container(
-                decoration: const BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(60),
-                      topRight: Radius.circular(60)),
-                ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(12, 85, 12, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Welcome to login',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Plase sign in to continue',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      CustomTextFormField(
-                        controller: email,
-                        autoFocus: false,
-                        hinttext: 'Email',
-                        labeltext: 'Email',
-                        prefixicon: const Icon(
-                          Icons.email,
-                          color: primaryColor,
-                        ),
-                      ),
-                      CustomTextFormField(
-                        controller: password,
-                        keyboardtype: TextInputType.text,
-                        obscuretext: true,
-                        autoFocus: false,
-                        hinttext: 'Password',
-                        labeltext: 'Password',
-                        prefixicon: const Icon(
-                          Icons.password,
-                          color: primaryColor,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 50,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_validateLogin()) {
-                                signUserIn();
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(primaryColor),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  // side: BorderSide(color: Colors.red),
+                child: Container(
+                    decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(60),
+                          topRight: Radius.circular(60)),
+                    ),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                const Text(
+                                  'Welcome to login!',
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                            ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(color: Colors.white),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                const Text(
+                                  'Plase sign in to continue',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                CustomTextFormField(
+                                  controller: email,
+                                  autoFocus: false,
+                                  hinttext: 'Email',
+                                  labeltext: 'Email',
+                                  prefixicon: const Icon(
+                                    Icons.email,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                CustomTextFormField(
+                                  controller: password,
+                                  keyboardtype: TextInputType.text,
+                                  obscuretext: true,
+                                  autoFocus: false,
+                                  hinttext: 'Password',
+                                  labeltext: 'Password',
+                                  prefixicon: const Icon(
+                                    Icons.password,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (_validateLogin()) {
+                                          signUserIn();
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                primaryColor),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            // side: BorderSide(color: Colors.red),
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Login',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              )),
+                      ],
+                    )),
+              )
             ],
           ),
         ),

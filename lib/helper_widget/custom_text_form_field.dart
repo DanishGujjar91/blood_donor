@@ -40,7 +40,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 75,
       child: TextFormField(
         style: const TextStyle(fontSize: 15.0, color: Colors.black),
         autofocus: autoFocus,
@@ -51,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscuretext,
         keyboardType: keyboardtype,
         maxLength: maxlenght,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           prefixIconColor: prefixIconColor,
           border: OutlineInputBorder(
@@ -60,8 +61,7 @@ class CustomTextFormField extends StatelessWidget {
           prefixIcon: prefixicon,
           suffixIcon: suffixicon,
           prefixStyle: prefixStyle,
-          // contentPadding:
-          //     const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+          contentPadding: EdgeInsets.only(left: 14, bottom: 10, top: 6),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red),
             borderRadius: BorderRadius.circular(18.0),
