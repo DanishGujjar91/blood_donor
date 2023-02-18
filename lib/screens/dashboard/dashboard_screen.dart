@@ -1,7 +1,6 @@
 import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_drawer.dart';
-import 'package:blood_donor/screens/dashboard/auth/signup_screen.dart';
 import 'package:blood_donor/screens/dashboard/home/home_screen.dart';
 import 'package:blood_donor/screens/dashboard/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -69,14 +69,11 @@ class Auth {
     final user = _firebaseAuth.currentUser;
 
     if (user != null) {
-      Timer(
-        const Duration(seconds: 0),
-        (() => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DashboardScreen(),
-            ))),
-      );
+      (() => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardScreen(),
+          )));
     } else {
       Timer(
         const Duration(seconds: 1),
