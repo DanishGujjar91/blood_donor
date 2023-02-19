@@ -291,7 +291,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     createUserWithEmailAndPassword();
                                     const snackBar = SnackBar(
                                       content: Text(
-                                          'Your profile is updated successfully!'),
+                                          'Your account is created successfully!'),
                                     );
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
@@ -347,24 +347,25 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   createUserWithEmailAndPassword() async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     showDialog(
       context: context,
       builder: (context) {
         return const Center(child: CircularProgressIndicator());
       },
     );
-    uploadImage(File(profilePic!)).whenComplete(() async {
-      try {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-          email: email.text.trim(),
-          password: password.text.trim(),
-        )
-            .then((value) async {
-          await firebaseFirestore
-              .collection('Users')
-              .add(UserMode(
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text.trim(),
+        password: password.text.trim(),
+      );
+      uploadImage(File(profilePic!)).whenComplete(() async {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .add(UserModel(
+                id: userCredential.user!.uid,
                 name: name.text.trim(),
                 email: email.text.trim(),
                 password: password.text.trim(),
@@ -377,23 +378,26 @@ class _SignupScreenState extends State<SignupScreen> {
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()),
                   ));
-        });
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            print('The password provided is too weak.');
+          } else if (e.code == 'email-already-in-use') {
+            print('The account already exists for that email.');
+          }
+        } catch (e) {
+          print(e);
         }
-      } catch (e) {
-        print(e);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
       }
-    });
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+    } catch (e) {
+      print(e);
+    }
+
     Navigator.pop(context);
   }
 }

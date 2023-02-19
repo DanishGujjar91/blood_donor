@@ -13,43 +13,28 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, this.userMode});
-  final UserMode? userMode;
+  final UserModel? userMode;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  var name = TextEditingController();
-  var email = TextEditingController();
-  var phone = TextEditingController();
-  var password = TextEditingController();
-  var confirmPassword = TextEditingController();
-  final ref = FirebaseDatabase.instance.ref('Users');
+  var nameC = TextEditingController();
+  var emailC = TextEditingController();
+  var phoneC = TextEditingController();
+  var passwordC = TextEditingController();
+  var confirmPasswordC = TextEditingController();
 
   String? profilePic;
-
+  String? downloadUrl;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   if (FirebaseAuth.instance.currentUser!.displayName == null) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         const SnackBar(content: Text('please complete profile firsty')));
-    //   } else {
-    //     FirebaseFirestore.instance
-    //         .collection('users')
-    //         .doc(FirebaseAuth.instance.currentUser!.uid)
-    //         .get()
-    //         .then((DocumentSnapshot documentSnapshot) {
-    //       if (documentSnapshot.exists) {
-    //         print('Document exists on the database');
-    //       }
-    //     });
-    //   }
-    // });
-    fetch();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getProfileData();
+    });
   }
 
   @override
@@ -93,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     children: [
                       CustomTextFormField(
-                        controller: name,
+                        controller: nameC,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'This field is required';
@@ -114,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       CustomTextFormField(
-                        controller: email,
+                        controller: emailC,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'This field is required';
@@ -136,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       CustomTextFormField(
-                        controller: password,
+                        controller: passwordC,
                         validator: (value) {
                           RegExp regex = RegExp(
                               r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
@@ -167,12 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (value!.isEmpty) {
                             return 'Plase enter re-password';
                           }
-                          if (password.text != confirmPassword.text) {
+                          if (passwordC.text != confirmPasswordC.text) {
                             return 'Password do not match';
                           }
                           return null;
                         },
-                        controller: confirmPassword,
+                        controller: confirmPasswordC,
                         keyboardtype: TextInputType.text,
                         obscuretext: true,
                         autoFocus: false,
@@ -186,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.09,
                         child: IntlPhoneField(
-                          controller: phone,
+                          controller: phoneC,
                           decoration: InputDecoration(
                             focusColor: primaryColor,
                             hoverColor: primaryColor,
@@ -250,7 +235,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  String? downloadUrl;
   Future<String?> uploadImage(File filepath, String? reference) async {
     try {
       final finalName =
@@ -274,21 +258,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update(UserMode(
+          .update(UserModel(
                   image: downloadUrl,
-                  name: name.text,
-                  email: email.text,
-                  password: password.text,
-                  confirmPassword: confirmPassword.text,
-                  phoneNo: phone.text)
+                  name: nameC.text,
+                  email: emailC.text,
+                  password: passwordC.text,
+                  confirmPassword: confirmPasswordC.text,
+                  phoneNo: phoneC.text)
               .toJson())
           .whenComplete(() {
-        FirebaseAuth.instance.currentUser!.updateDisplayName(name.text);
+        FirebaseAuth.instance.currentUser!.updateDisplayName(nameC.text);
       });
     });
   }
 
-  fetch() async {
+  Future getProfileData() async {
+    var collection = FirebaseFirestore.instance.collection('users');
+    try {
+      var querySnapshot = await collection.get();
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+
+        setState(() {
+          nameC = TextEditingController(text: data['name']);
+          emailC = TextEditingController(text: data['email']);
+          passwordC = TextEditingController(text: data['password']);
+          confirmPasswordC =
+              TextEditingController(text: data['confirmPassword']);
+          phoneC = TextEditingController(text: data['phoneNo']);
+        }); // <-- Retrieving the value.
+
+      }
+    } catch (e) {
+      print('Document does not exist on the database: $e');
+    }
+
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)

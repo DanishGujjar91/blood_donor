@@ -43,7 +43,7 @@ class Auth {
     }
   }
 
-  createUser(UserMode user, BuildContext context) async {
+  createUser(UserModel user, BuildContext context) async {
     const snackBar = SnackBar(
       content: Text('Your account is created successfully!'),
     );

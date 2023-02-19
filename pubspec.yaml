@@ -41,7 +41,7 @@ dependencies:
   firebase_database: ^10.0.9
   firebase_auth: ^4.2.5
   intl_phone_field: ^3.1.0
-  get: ^4.6.5
+  
   flutterfire_cli: ^0.2.7
   flutter_config: ^2.0.0
   carousel_slider: ^4.2.1
@@ -53,6 +53,7 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   permission_handler: ^10.2.0
   rounded_bottom_navbar: ^0.0.1
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

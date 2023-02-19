@@ -1,22 +1,25 @@
-class UserMode {
+class UserModel {
   final String? name;
   final String? email;
   final String? password;
   final String? confirmPassword;
   final String? phoneNo;
   final String? image;
-  UserMode({
-    required this.image,
-    required this.name,
-    required this.email,
-    required this.password,
-    required this.confirmPassword,
-    required this.phoneNo,
+  final String? id;
+  UserModel({
+    this.id,
+    this.image,
+    this.name,
+    this.email,
+    this.password,
+    this.confirmPassword,
+    this.phoneNo,
   });
 
-  UserMode.fromJson(
+  UserModel.fromJson(
     Map<String, dynamic> json,
-  )   : image = json['image'],
+  )   : id = json['id'],
+        image = json['image'],
         name = json['name'],
         email = json['email'],
         password = json['password'],
@@ -24,6 +27,7 @@ class UserMode {
         phoneNo = json['phoneNo'];
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'email': email,
         'password': password,
@@ -60,3 +64,11 @@ class UserMode {
 //   }
 
 // }
+
+class animal {
+  eat() {}
+}
+
+class dog extends animal {}
+
+class cat extends dog {}
