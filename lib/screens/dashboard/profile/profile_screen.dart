@@ -275,8 +275,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future getProfileData() async {
-    final User user = FirebaseAuth.instance.currentUser!;
-
     var collection = FirebaseFirestore.instance.collection('users');
     try {
       var querySnapshot = await collection.get();
