@@ -32,8 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getCarouselImage();
-    userModel =
-        getHomeData().map<UserModel>((v) => UserModel.fromJson(v)).toList();
   }
 
   @override
@@ -135,62 +133,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: userModel.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: ListTile(
-                    textColor: blackColor,
-                    leading: Container(
-                      height: 100,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(12),
-                        image: const DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                'https://files.jotform.com/jotformapps/blood-donation-form-d98c2c55600195111e05599b35bdb87e-classic.png')),
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('users').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot document = snapshot.data!.docs[index];
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListTile(
+                        leading: Container(
+                          height: 60,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: NetworkImage(data['image']),
+                                  fit: BoxFit.fill)),
+                        ),
+                        title: Text(data['name']),
+                        subtitle: Text(data['email']),
                       ),
-                    ),
-                    title: Text(
-                      userModel[index].name ?? 'Danish Asghar',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    subtitle: const Text(
-                      'S/O Muhammad Asghar Gujjar',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             )
           ],
         ));
-  }
-
-  getHomeData() async {
-    var collection = FirebaseFirestore.instance.collection('users');
-    try {
-      var querySnapshot = await collection.get();
-      for (var doc in querySnapshot.docs) {
-        Map<String, dynamic> data = doc.data();
-
-        setState(() {
-          UserModel(
-            name: data['name'],
-          );
-        });
-      }
-    } catch (e) {
-      print('Document does not exist on the database: $e');
-    }
   }
 }
 

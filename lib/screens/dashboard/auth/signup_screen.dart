@@ -250,6 +250,27 @@ class _SignupScreenState extends State<SignupScreen> {
                                     color: primaryColor,
                                   ),
                                 ),
+                                CustomTextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Plase enter re-password';
+                                    }
+                                    if (password.text != confirmPassword.text) {
+                                      return 'Password do not match';
+                                    }
+                                    return null;
+                                  },
+                                  controller: confirmPassword,
+                                  keyboardtype: TextInputType.text,
+                                  obscuretext: true,
+                                  autoFocus: false,
+                                  hinttext: 'Blood Group',
+                                  labeltext: 'Blood Group',
+                                  prefixicon: const Icon(
+                                    Icons.password,
+                                    color: primaryColor,
+                                  ),
+                                ),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.09,
