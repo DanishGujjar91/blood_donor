@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_text_form_field.dart';
 import 'package:blood_donor/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,10 +67,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Image.asset('assets/images/profile.png',
                                   width: 115, height: 115),
                             )
-                          : CircleAvatar(
-                              radius: 60,
-                              backgroundImage: FileImage(File(profilePic!)),
-                            ),
+                          : profilePic!.contains('http')
+                              ? CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: NetworkImage(profilePic!))
+                              : CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: FileImage(File(profilePic!)),
+                                ),
                     ),
                   ),
                   Column(
@@ -256,7 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future update() async {
     await uploadImage(File(profilePic!), 'profile').whenComplete(() async {
       await FirebaseFirestore.instance
-          .collection('Users')
+          .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update(UserModel(
                   image: downloadUrl,
@@ -273,6 +275,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future getProfileData() async {
+    final User user = FirebaseAuth.instance.currentUser!;
+
     var collection = FirebaseFirestore.instance.collection('users');
     try {
       var querySnapshot = await collection.get();
@@ -286,23 +290,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
           confirmPasswordC =
               TextEditingController(text: data['confirmPassword']);
           phoneC = TextEditingController(text: data['phoneNo']);
+          profilePic = data['image'];
         }); // <-- Retrieving the value.
-
       }
     } catch (e) {
       print('Document does not exist on the database: $e');
     }
-
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
   }
+
+  // Future<String?> getImage(String imageName) async {
+  //   Reference firebaseStorage = FirebaseStorage.instance.ref();
+  //   if (imageName == null) {
+  //     return null;
+  //   }
+  //   try {
+  //     var urlRef = firebaseStorage
+  //         .child("users")
+  //         .child('${imageName.toLowerCase()}.png');
+  //     var imgUrl = await urlRef.getDownloadURL();
+  //     return imgUrl;
+  //   } catch (e) {}
+  // }
 }
