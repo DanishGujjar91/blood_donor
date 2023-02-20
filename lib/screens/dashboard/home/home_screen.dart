@@ -1,4 +1,5 @@
 import 'package:blood_donor/constants/color_constant.dart';
+import 'package:blood_donor/models/user_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -13,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<String> _carouselImages = [];
+  List<UserModel> userModel = [];
   var _dotPostion = 0;
   Future getCarouselImage() async {
     var firestore = FirebaseFirestore.instance;
@@ -30,104 +32,165 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getCarouselImage();
+    userModel =
+        getHomeData().map<UserModel>((v) => UserModel.fromJson(v)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 2.5,
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: 200,
-                aspectRatio: 16 / 9,
-                viewportFraction: 0.9,
-                initialPage: 0,
-                enableInfiniteScroll: true,
-                reverse: false,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enlargeCenterPage: true,
-                enlargeFactor: 0.3,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index, carouselPageChangeReason) {
-                  setState(() {
-                    _dotPostion = index;
-                  });
-                },
-              ),
-              items: _carouselImages.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: NetworkImage(i), fit: BoxFit.fitWidth)),
-                    );
+    return SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AspectRatio(
+              aspectRatio: 2.5,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 200,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 0.9,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.3,
+                  scrollDirection: Axis.horizontal,
+                  onPageChanged: (index, carouselPageChangeReason) {
+                    setState(() {
+                      _dotPostion = index;
+                    });
                   },
+                ),
+                items: _carouselImages.map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: NetworkImage(i), fit: BoxFit.fitWidth)),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            DotsIndicator(
+              dotsCount: _carouselImages.isEmpty ? 1 : _carouselImages.length,
+              position: _dotPostion.toDouble(),
+              decorator: DotsDecorator(
+                size: const Size.square(9.0),
+                activeSize: const Size(18.0, 9.0),
+                activeColor: primaryColor,
+                activeShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Wrap(
+              spacing: 12.0, // gap between adjacent chips
+              runSpacing: 12.0, // gap between lines
+              children: <Widget>[
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.health_and_safety,
+                  text: 'Find a Donor',
+                ),
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.bloodtype,
+                  text: 'Blood Bank',
+                ),
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.message,
+                  text: 'Request',
+                ),
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.settings,
+                  text: 'Other',
+                ),
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.location_on,
+                  text: 'Location',
+                ),
+                BoxWidget(
+                  onTap: () {},
+                  icon: Icons.settings,
+                  text: 'Setting',
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: userModel.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: ListTile(
+                    textColor: blackColor,
+                    leading: Container(
+                      height: 100,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                                'https://files.jotform.com/jotformapps/blood-donation-form-d98c2c55600195111e05599b35bdb87e-classic.png')),
+                      ),
+                    ),
+                    title: Text(
+                      userModel[index].name ?? 'Danish Asghar',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    subtitle: const Text(
+                      'S/O Muhammad Asghar Gujjar',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
                 );
-              }).toList(),
-            ),
-          ),
-          DotsIndicator(
-            dotsCount: _carouselImages.isEmpty ? 1 : _carouselImages.length,
-            position: _dotPostion.toDouble(),
-            decorator: DotsDecorator(
-              size: const Size.square(9.0),
-              activeSize: const Size(18.0, 9.0),
-              activeColor: primaryColor,
-              activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)),
-            ),
-          ),
-          Wrap(
-            spacing: 12.0, // gap between adjacent chips
-            runSpacing: 12.0, // gap between lines
-            children: <Widget>[
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.health_and_safety,
-                text: 'Find a Donor',
-              ),
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.bloodtype,
-                text: 'Blood Bank',
-              ),
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.message,
-                text: 'Request',
-              ),
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.settings,
-                text: 'Other',
-              ),
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.location_on,
-                text: 'Location',
-              ),
-              BoxWidget(
-                onTap: () {},
-                icon: Icons.settings,
-                text: 'Setting',
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+              },
+            )
+          ],
+        ));
+  }
+
+  getHomeData() async {
+    var collection = FirebaseFirestore.instance.collection('users');
+    try {
+      var querySnapshot = await collection.get();
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+
+        setState(() {
+          UserModel(
+            name: data['name'],
+          );
+        });
+      }
+    } catch (e) {
+      print('Document does not exist on the database: $e');
+    }
   }
 }
 

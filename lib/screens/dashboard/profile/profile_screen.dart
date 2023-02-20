@@ -274,6 +274,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  Future<UserModel> getHomeData() async {
+    var collection = FirebaseFirestore.instance.collection('users');
+    try {
+      var querySnapshot = await collection.get();
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+
+        setState(() {
+          UserModel(
+            name: data['name'],
+            email: data['email'],
+            image: data['image'],
+          );
+        });
+      }
+    } catch (e) {
+      print('Document does not exist on the database: $e');
+    }
+    return UserModel();
+  }
+
   Future getProfileData() async {
     var collection = FirebaseFirestore.instance.collection('users');
     try {
@@ -294,6 +315,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print('Document does not exist on the database: $e');
     }
+    return collection;
   }
 
   // Future<String?> getImage(String imageName) async {

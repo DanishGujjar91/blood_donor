@@ -64,11 +64,3 @@ class UserModel {
 //   }
 
 // }
-
-class animal {
-  eat() {}
-}
-
-class dog extends animal {}
-
-class cat extends dog {}
