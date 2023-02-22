@@ -166,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         title: Text(data['name']),
                         subtitle: Text(data['email']),
+                        trailing: Text(data['bloodType']),
                       ),
                     );
                   },

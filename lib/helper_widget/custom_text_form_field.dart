@@ -40,7 +40,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.09,
+      height: MediaQuery.of(context).size.height * 0.10,
       child: TextFormField(
         style: const TextStyle(fontSize: 15.0, color: Colors.black),
         autofocus: autoFocus,

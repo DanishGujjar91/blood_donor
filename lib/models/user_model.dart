@@ -6,6 +6,7 @@ class UserModel {
   final String? phoneNo;
   final String? image;
   final String? id;
+  final String? bloodType;
   UserModel({
     this.id,
     this.image,
@@ -14,6 +15,7 @@ class UserModel {
     this.password,
     this.confirmPassword,
     this.phoneNo,
+    this.bloodType,
   });
 
   UserModel.fromJson(
@@ -24,7 +26,8 @@ class UserModel {
         email = json['email'],
         password = json['password'],
         confirmPassword = json['confirmPassword'],
-        phoneNo = json['phoneNo'];
+        phoneNo = json['phoneNo'],
+        bloodType = json['bloodType'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -34,6 +37,7 @@ class UserModel {
         'confirmPassword': confirmPassword,
         'phoneNo': phoneNo,
         'image': image,
+        'bloodType': bloodType,
       };
 }
 

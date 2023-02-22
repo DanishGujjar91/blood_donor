@@ -1,7 +1,6 @@
 import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_drawer.dart';
-import 'package:blood_donor/screens/dashboard/donor_form/donor_form.dart';
 import 'package:blood_donor/screens/dashboard/home/home_screen.dart';
 import 'package:blood_donor/screens/dashboard/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +21,6 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   List<Widget> widgets = [
     const HomeScreen(),
-    const DonorForm(),
     const ProfileScreen(),
   ];
   @override
@@ -94,13 +92,6 @@ class _DashboardScreenState extends State<DashboardScreen>
               size: 30,
             ),
             label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bloodtype,
-              size: 30,
-            ),
-            label: 'Donor',
           ),
           BottomNavigationBarItem(
             icon: Icon(

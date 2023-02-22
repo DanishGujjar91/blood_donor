@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_text_form_field.dart';
+import 'package:blood_donor/helper_widget/helper_service.dart/custom_dropdown.dart';
 import 'package:blood_donor/models/user_model.dart';
 import 'package:blood_donor/screens/dashboard/auth/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,34 +26,17 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
-
+  List<String> list = <String>['A', 'A+', 'AB+', 'A-'];
   String? downloadUrl;
   String? profilePic;
-
+  String? selectedValue;
   final _formKey = GlobalKey<FormState>();
   String? errorMessage = '';
+  bool isPasswordVisible = true;
+  bool isConfirmPasswordVisible = true;
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   if (FirebaseAuth.instance.currentUser!.displayName == null) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         const SnackBar(content: Text('please complete profile firsty')));
-    //   } else {
-    //     FirebaseFirestore.instance
-    //         .collection('Users')
-    //         .doc(FirebaseAuth.instance.currentUser!.uid)
-    //         .get()
-    //         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    //       name.text = snapshot.data()!['name'];
-    //       email.text = snapshot.data()!['email'];
-    //       password.text = snapshot.data()!['password'];
-    //       confirmPassword.text = snapshot.data()!['confirmPassword'];
-    //       phone.text = snapshot.data()!['phoneNo'];
-    //       profilePic = snapshot.data()!['image'];
-    //     });
-    //   }
-    // });
   }
 
   @override
@@ -115,15 +99,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(60),
-                      topRight: Radius.circular(60)),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40)),
                 ),
                 child: CustomScrollView(
                   slivers: [
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,124 +143,171 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                             Column(
                               children: [
-                                CustomTextFormField(
-                                  controller: name,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    if (!RegExp(r"^[A-Za-z][A-Za-z0-9_]{7,29}$")
-                                        .hasMatch(value)) {
-                                      return "Please enter a valid name";
-                                    }
-                                    return null;
-                                  },
-                                  keyboardtype: TextInputType.name,
-                                  autoFocus: false,
-                                  hinttext: 'Name',
-                                  labeltext: 'Name',
-                                  prefixicon: const Icon(
-                                    Icons.person,
-                                    color: primaryColor,
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: CustomTextFormField(
+                                        controller: name,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          if (!RegExp(
+                                                  r"^[A-Za-z][A-Za-z0-9_]{7,29}$")
+                                              .hasMatch(value)) {
+                                            return "Please enter a valid name";
+                                          }
+                                          return null;
+                                        },
+                                        keyboardtype: TextInputType.name,
+                                        autoFocus: false,
+                                        hinttext: 'Name',
+                                        labeltext: 'Name',
+                                        prefixicon: const Icon(
+                                          Icons.person,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: CustomTextFormField(
+                                        controller: email,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          if (!RegExp(
+                                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                              .hasMatch(value)) {
+                                            return "Please enter a valid email address";
+                                          }
+                                          return null;
+                                        },
+                                        keyboardtype:
+                                            TextInputType.emailAddress,
+                                        autoFocus: false,
+                                        hinttext: 'Email',
+                                        labeltext: 'Email',
+                                        prefixicon: const Icon(
+                                          Icons.email,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                CustomTextFormField(
-                                  controller: email,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    if (!RegExp(
-                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                        .hasMatch(value)) {
-                                      return "Please enter a valid email address";
-                                    }
-                                    return null;
-                                  },
-                                  keyboardtype: TextInputType.emailAddress,
-                                  autoFocus: false,
-                                  hinttext: 'Email',
-                                  labeltext: 'Email',
-                                  prefixicon: const Icon(
-                                    Icons.email,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                                CustomTextFormField(
-                                  controller: password,
-                                  validator: (value) {
-                                    RegExp regex = RegExp(
-                                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-                                    if (value!.isEmpty) {
-                                      return 'Please enter password';
-                                    } else if (value.length < 6) {
-                                      return 'Password too short';
-                                    } else {
-                                      if (!regex.hasMatch(value)) {
-                                        return 'Enter valid password';
-                                      } else {
-                                        return null;
-                                      }
-                                    }
-                                  },
-                                  keyboardtype: TextInputType.text,
-                                  obscuretext: true,
-                                  autoFocus: false,
-                                  hinttext: 'Password',
-                                  labeltext: 'Password',
-                                  prefixicon: const Icon(
-                                    Icons.password,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                                CustomTextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Plase enter re-password';
-                                    }
-                                    if (password.text != confirmPassword.text) {
-                                      return 'Password do not match';
-                                    }
-                                    return null;
-                                  },
-                                  controller: confirmPassword,
-                                  keyboardtype: TextInputType.text,
-                                  obscuretext: true,
-                                  autoFocus: false,
-                                  hinttext: 'ConfirmPassword',
-                                  labeltext: 'Confirm Password',
-                                  prefixicon: const Icon(
-                                    Icons.password,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                                CustomTextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Plase enter re-password';
-                                    }
-                                    if (password.text != confirmPassword.text) {
-                                      return 'Password do not match';
-                                    }
-                                    return null;
-                                  },
-                                  controller: confirmPassword,
-                                  keyboardtype: TextInputType.text,
-                                  obscuretext: true,
-                                  autoFocus: false,
-                                  hinttext: 'Blood Group',
-                                  labeltext: 'Blood Group',
-                                  prefixicon: const Icon(
-                                    Icons.password,
-                                    color: primaryColor,
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: CustomTextFormField(
+                                        controller: password,
+                                        validator: (value) {
+                                          RegExp regex = RegExp(
+                                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                                          if (value!.isEmpty) {
+                                            return 'Please enter password';
+                                          } else if (value.length < 6) {
+                                            return 'Password too short';
+                                          } else {
+                                            if (!regex.hasMatch(value)) {
+                                              return 'Enter valid password';
+                                            } else {
+                                              return null;
+                                            }
+                                          }
+                                        },
+                                        keyboardtype: TextInputType.text,
+                                        obscuretext: isPasswordVisible,
+                                        autoFocus: false,
+                                        suffixicon: InkWell(
+                                          child: isPasswordVisible
+                                              ? const Icon(
+                                                  Icons.visibility,
+                                                  color: primaryColor,
+                                                )
+                                              : const Icon(
+                                                  Icons.visibility_off,
+                                                  color: primaryColor,
+                                                ),
+                                          onTap: () {
+                                            setState(() {
+                                              isPasswordVisible =
+                                                  !isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                        hinttext: 'Password',
+                                        labeltext: 'Password',
+                                        prefixicon: const Icon(
+                                          Icons.password,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: CustomTextFormField(
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Plase enter re-password';
+                                          }
+                                          if (password.text !=
+                                              confirmPassword.text) {
+                                            return 'Password do not match';
+                                          }
+                                          return null;
+                                        },
+                                        suffixicon: InkWell(
+                                          child: isConfirmPasswordVisible
+                                              ? const Icon(
+                                                  Icons.visibility,
+                                                  color: primaryColor,
+                                                )
+                                              : const Icon(
+                                                  Icons.visibility_off,
+                                                  color: primaryColor,
+                                                ),
+                                          onTap: () {
+                                            setState(() {
+                                              isConfirmPasswordVisible =
+                                                  !isConfirmPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                        controller: confirmPassword,
+                                        keyboardtype: TextInputType.text,
+                                        obscuretext: isConfirmPasswordVisible,
+                                        autoFocus: false,
+                                        hinttext: 'ConfirmPassword',
+                                        labeltext: 'Confirm Password',
+                                        prefixicon: const Icon(
+                                          Icons.password,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.09,
+                                      MediaQuery.of(context).size.height * 0.11,
+                                  width: MediaQuery.of(context).size.width * 2,
                                   child: IntlPhoneField(
                                     controller: phone,
                                     decoration: InputDecoration(
+                                      labelStyle: const TextStyle(
+                                          fontSize: 15.0, color: Colors.black),
                                       focusColor: primaryColor,
                                       hoverColor: primaryColor,
                                       hintText: 'Phone Number',
@@ -301,10 +332,31 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                   ),
                                 ),
+                                CustomDropDownButton(
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    value: selectedValue,
+                                    underline: const SizedBox(),
+                                    hint: const Text("LMV"),
+                                    items: list.map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? value) {
+                                      // This is called when the user selects an item.
+                                      setState(() {
+                                        selectedValue = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
+                              height: MediaQuery.of(context).size.height * 0.07,
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
@@ -393,6 +445,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 confirmPassword: confirmPassword.text.trim(),
                 phoneNo: phone.text.trim(),
                 image: downloadUrl,
+                bloodType: selectedValue,
               ).toJson())
               .then((value) => Navigator.push(
                     context,
