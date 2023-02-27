@@ -19,17 +19,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: primaryColor,
+            decoration: BoxDecoration(
+              color: isDark ? Colors.blue : primaryColor,
             ),
             child: Column(
               children: [Text("Email: ${user?.email!}")],
@@ -62,17 +59,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.pop(context);
             },
           ),
-          const Divider(
-            color: primaryColor,
+          Divider(
+            color: isDark ? whiteColor : primaryColor,
             thickness: 1,
           ),
           ListTile(
             title: const Text(
               'Logout',
             ),
-            leading: const Icon(
+            leading: Icon(
               Icons.logout,
-              color: primaryColor,
+              color: isDark ? whiteColor : primaryColor,
             ),
             onTap: () {
               // Update the state of the app

@@ -22,6 +22,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? action;
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SafeArea(
       top: false,
       bottom: false,
@@ -30,7 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           AppBar(
             actions: action,
             elevation: 0,
-            backgroundColor: whiteColor,
+            backgroundColor: isDark ? Color(0xFF2e2e2e) : whiteColor,
             leading: leading,
             title: Text(
               title,
@@ -39,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             centerTitle: true,
             flexibleSpace: Container(
               decoration: BoxDecoration(
-                color: primaryColor,
+                color: isDark ? Colors.blue : primaryColor,
                 borderRadius: borderRadius,
               ),
             ),

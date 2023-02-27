@@ -39,10 +39,12 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String?)? onSaved;
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.10,
       child: TextFormField(
-        style: const TextStyle(fontSize: 15.0, color: Colors.black),
+        style:
+            TextStyle(fontSize: 15.0, color: isDark ? whiteColor : blackColor),
         autofocus: autoFocus,
         onSaved: onSaved,
         cursorColor: primaryColor,
@@ -53,16 +55,18 @@ class CustomTextFormField extends StatelessWidget {
         maxLength: maxlenght,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIconColor: prefixIconColor,
+          prefixIconColor: isDark ? Colors.white : Colors.red,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
+          hintStyle: TextStyle(color: isDark ? Colors.white : blackColor),
           hintText: hinttext,
           prefixIcon: prefixicon,
           suffixIcon: suffixicon,
+          labelStyle: TextStyle(color: isDark ? Colors.white : blackColor),
           prefixStyle: prefixStyle,
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.red),
+            borderSide: BorderSide(color: isDark ? Colors.blue : Colors.red),
             borderRadius: BorderRadius.circular(18.0),
           ),
           counter: const Offstage(),

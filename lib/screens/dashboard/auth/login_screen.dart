@@ -2,11 +2,13 @@ import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_text_form_field.dart';
 import 'package:blood_donor/helper_widget/helper_service.dart/custom_snackbar.dart';
+import 'package:blood_donor/main.dart';
 import 'package:blood_donor/screens/dashboard/auth/signup_screen.dart';
 import 'package:blood_donor/screens/dashboard/dashboard_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,30 +20,44 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? errorMessage = '';
   bool isLogin = true;
-
+  var emailVar = 'No Value Save';
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   final FocusNode _userFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
+  void saveUser() async {
+    var pref = await SharedPreferences.getInstance();
+    await pref.setString('email', email.text.toString());
+  }
+
+  void getUser() async {
+    var pref = await SharedPreferences.getInstance();
+    var getEmail = pref.getString('email');
+    emailVar = getEmail ?? "No Value Save";
+    setState(() {});
+  }
+
   void signUserIn() async {
     showDialog(
       context: context,
       builder: (context) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(
+            child: CircularProgressIndicator(
+          color: whiteColor,
+        ));
       },
     );
 
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
-          .then((value) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DashboardScreen()),
-              ));
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email.text.trim(), password: password.text.trim());
+      // .then((value) => Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => const DashboardScreen()),
+      //     ));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -55,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    getUser();
   }
 
   @override
@@ -183,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       onPressed: () {
                                         if (_validateLogin()) {
                                           signUserIn();
+                                          saveUser();
                                         }
                                       },
                                       style: ButtonStyle(

@@ -189,6 +189,8 @@ class BoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -209,7 +211,7 @@ class BoxWidget extends StatelessWidget {
                   offset: const Offset(1, 2), // changes position of shadow
                 ),
               ],
-              color: primaryColor,
+              color: isDark ? Colors.blue : primaryColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(

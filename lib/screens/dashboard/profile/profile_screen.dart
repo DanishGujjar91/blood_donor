@@ -37,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Form(
       key: _formKey,
       child: CustomScrollView(
@@ -97,7 +98,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         labeltext: 'Name',
                         prefixicon: const Icon(
                           Icons.person,
-                          color: primaryColor,
                         ),
                       ),
                       CustomTextFormField(
@@ -119,7 +119,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         labeltext: 'Email',
                         prefixicon: const Icon(
                           Icons.email,
-                          color: primaryColor,
                         ),
                       ),
                       CustomTextFormField(
@@ -146,7 +145,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         labeltext: 'Password',
                         prefixicon: const Icon(
                           Icons.password,
-                          color: primaryColor,
                         ),
                       ),
                       CustomTextFormField(
@@ -167,7 +165,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         labeltext: 'Confirm Password',
                         prefixicon: const Icon(
                           Icons.password,
-                          color: primaryColor,
                         ),
                       ),
                       SizedBox(
@@ -212,8 +209,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       },
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(primaryColor),
+                        backgroundColor: MaterialStateProperty.all(
+                            isDark ? Colors.blue : primaryColor),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(

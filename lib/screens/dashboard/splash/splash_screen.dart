@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Auth().isLogin(context);
+    // Auth().isLogin(context);
   }
 
   @override

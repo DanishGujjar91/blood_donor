@@ -6,6 +6,10 @@ import 'package:blood_donor/screens/dashboard/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/theme_manager.dart';
+
+ThemeManager _themeManager = ThemeManager();
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({
     super.key,
@@ -24,8 +28,26 @@ class _DashboardScreenState extends State<DashboardScreen>
     const ProfileScreen(),
   ];
   @override
+  void dispose() {
+    _themeManager.removeListener(() {
+      themelistener();
+    });
+    super.dispose();
+  }
+
+  @override
   void initState() {
+    // TODO: implement initState
     super.initState();
+    _themeManager.addListener(() {
+      themelistener();
+    });
+  }
+
+  themelistener() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -49,6 +71,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                     onPressed: () {
                       logOUt();
+                    },
+                  ),
+                  Switch(
+                    value: _themeManager.themeMode == ThemeMode.dark,
+                    onChanged: (newValue) {
+                      _themeManager.toggleTheme(newValue);
                     },
                   )
                 ],
