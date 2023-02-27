@@ -66,49 +66,49 @@ class Auth {
     await _firebaseAuth.signOut();
   }
 
-  // void isLogin(BuildContext context) {
-  //   final user = _firebaseAuth.currentUser;
+  void isLogin(BuildContext context) {
+    final user = _firebaseAuth.currentUser;
 
-  //   if (user != null) {
-  //     (() => Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => const DashboardScreen(),
-  //         )));
-  //   } else {
-  //     Timer(
-  //       const Duration(seconds: 1),
-  //       (() => Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => const LoginScreen(),
-  //           ))),
-  //     );
-  //   }
-  // }
+    if (user != null) {
+      (() => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardScreen(),
+          )));
+    } else {
+      Timer(
+        const Duration(seconds: 1),
+        (() => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ))),
+      );
+    }
+  }
 }
 
-// class AuthPage extends StatefulWidget {
-//   const AuthPage({super.key});
+class AuthPage extends StatefulWidget {
+  const AuthPage({super.key});
 
-//   @override
-//   State<AuthPage> createState() => _AuthPageState();
-// }
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
 
-// class _AuthPageState extends State<AuthPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: StreamBuilder<User?>(
-//         stream: FirebaseAuth.instance.authStateChanges(),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             return  DashboardScreen();
-//           } else {
-//             return const LoginScreen();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
+class _AuthPageState extends State<AuthPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return DashboardScreen();
+          } else {
+            return const LoginScreen();
+          }
+        },
+      ),
+    );
+  }
+}

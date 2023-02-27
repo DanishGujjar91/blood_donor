@@ -2,13 +2,12 @@ import 'package:blood_donor/constants/color_constant.dart';
 import 'package:blood_donor/helper_widget/custom_appbar.dart';
 import 'package:blood_donor/helper_widget/custom_drawer.dart';
 import 'package:blood_donor/screens/dashboard/home/home_screen.dart';
-import 'package:blood_donor/screens/dashboard/profile/profile_screen.dart';
+import 'package:blood_donor/theme/theme_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../theme/theme_manager.dart';
-
-ThemeManager _themeManager = ThemeManager();
+import 'profile/profile_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({
@@ -27,31 +26,11 @@ class _DashboardScreenState extends State<DashboardScreen>
     const HomeScreen(),
     const ProfileScreen(),
   ];
-  @override
-  void dispose() {
-    _themeManager.removeListener(() {
-      themelistener();
-    });
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _themeManager.addListener(() {
-      themelistener();
-    });
-  }
-
-  themelistener() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final themeChanger = Provider.of<ThemeManager>(context);
     void logOUt() {
       FirebaseAuth.instance.signOut();
     }
@@ -74,10 +53,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     },
                   ),
                   Switch(
-                    value: _themeManager.themeMode == ThemeMode.dark,
-                    onChanged: (newValue) {
-                      _themeManager.toggleTheme(newValue);
-                    },
+                    value: themeChanger.themeMode == ThemeMode.dark,
+                    onChanged: (newValue) => themeChanger.toggleTheme(newValue),
                   )
                 ],
                 borderRadius: const BorderRadius.only(
@@ -109,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         backgroundColor: whiteColor,
         selectedFontSize: 16,
         currentIndex: _selectedIndex,
-        selectedItemColor: primaryColor,
+        selectedItemColor: isDark ? Colors.blue : primaryColor,
         unselectedItemColor: Colors.black45,
         onTap: _onItemTapped,
         showUnselectedLabels: true,

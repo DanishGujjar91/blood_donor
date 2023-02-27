@@ -41,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             centerTitle: true,
             flexibleSpace: Container(
               decoration: BoxDecoration(
-                color: isDark ? Colors.blue : primaryColor,
+                color: isDark ? blueColor : primaryColor,
                 borderRadius: borderRadius,
               ),
             ),

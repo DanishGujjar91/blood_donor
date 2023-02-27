@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10),
         child: Column(
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decorator: DotsDecorator(
                 size: const Size.square(9.0),
                 activeSize: const Size(18.0, 9.0),
-                activeColor: primaryColor,
+                activeColor: isDark ? blueColor : primaryColor,
                 activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0)),
               ),
@@ -211,7 +212,7 @@ class BoxWidget extends StatelessWidget {
                   offset: const Offset(1, 2), // changes position of shadow
                 ),
               ],
-              color: isDark ? Colors.blue : primaryColor,
+              color: isDark ? blueColor : primaryColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(

@@ -210,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                            isDark ? Colors.blue : primaryColor),
+                            isDark ? blueColor : primaryColor),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(

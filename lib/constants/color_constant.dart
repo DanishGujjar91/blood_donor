@@ -9,7 +9,7 @@ const lightSkin = Color(0xFFF4F4F4);
 const skyBlueColor = Color(0xFFD1ECF4);
 
 const lightPurpleColor = Color(0xFFD0E2FF);
-const blueColor = Color(0xFF043DD0);
+const blueColor = Color(0xFF2196F3);
 
 const primaryColor = Color(0xFFF44336);
 const greyColor = Color(0xFFD6D6D6);
